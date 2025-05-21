@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -13,57 +14,72 @@ Route::get('/user', function (Request $request) {
 //user
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+
 Route::post('/user/check', [UserController::class, 'checkUser'])->middleware('auth:sanctum');
 Route::post('/user',  [UserController::class, 'store']);
 Route::get('/user{email}',  [UserController::class, 'index']);
 Route::put('/user/googleid/{id}',  [UserController::class, 'updateGoogleId']);
 Route::put('/user/{id}',  [UserController::class, 'update']);
+// login with google done
+Route::post('/login/google', [UserController::class, 'loginGoogle']);
+
+// update token one signal untuk push notif dll
+Route::put('/update-token/{user}', [UserController::class, 'updateToken']);
+
 
 
 //doctor
 
 //get all doctor
-Route::get('/doctor', [DoctorController::class, 'index'])->middleware('auth:sanctum');;
+Route::get('/clinic/doctor', [DoctorController::class, 'index'])->middleware('auth:sanctum');
 
 //store doctor
-Route::post('/doctor', [DoctorController::class, 'store'])->middleware('auth:sanctum');;
+Route::post('/clinic/doctor', [DoctorController::class, 'store'])->middleware('auth:sanctum');
 
 //update doctor
-Route::put('/doctor/{id}', [DoctorController::class, 'update'])->middleware('auth:sanctum');;
+Route::post('/clinic/doctor/{user}', [DoctorController::class, 'update'])->middleware('auth:sanctum');
 
 //delete doctor
-Route::delete('/doctor/{id}', [DoctorController::class, 'destroy'])->middleware('auth:sanctum');;
+Route::delete('/clinic/doctor/{user}', [DoctorController::class, 'destroy'])->middleware('auth:sanctum');
 
 //get active doctor
-Route::get('/doctor/active', [DoctorController::class, 'getActiveDoctor'])->middleware('auth:sanctum');;
+Route::get('/clinic/doctor/active', [DoctorController::class, 'getActiveDoctor']);
 
 //get search doctor
-Route::get('/doctor/search/', [DoctorController::class, 'getSearchDoctor'])->middleware('auth:sanctum');;
+Route::get('/doctor/search/', [DoctorController::class, 'getSearchDoctor'])->middleware('auth:sanctum');
 
 //get doctor by clinic
-Route::get('/doctor/clinic/{clinic_id}', [DoctorController::class, 'getDoctorByClinic'])->middleware('auth:sanctum');;
+Route::get('/doctor/clinic/{clinic_id}', [DoctorController::class, 'getDoctorByClinic'])->middleware('auth:sanctum');
 
 //get doctor by specialist
-Route::get('/doctor/specialist/{specialist_id}', [DoctorController::class, 'getDoctorBySpecialist'])->middleware('auth:sanctum');;
+Route::get('/doctor/specialist/{specialist_id}', [DoctorController::class, 'getDoctorBySpecialist'])->middleware('auth:sanctum');
 
 //get Doctor By id
-Route::get('/doctor/{id}', [DoctorController::class, 'getById'])->middleware('auth:sanctum');;
+Route::get('/doctor/{id}', [DoctorController::class, 'getById'])->middleware('auth:sanctum');
 
 
 //orders
 
 //get all order
-Route::get('/order', [OrderController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/orders', [OrderController::class, 'index'])->middleware('auth:sanctum');
 //store order
-Route::post('/order', [OrderController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/orders', [OrderController::class, 'store'])->middleware('auth:sanctum');
 //get order history by patient
-Route::get('/order/patient/{patient_id}', [OrderController::class, 'getOrderHistoryByPatient'])->middleware('auth:sanctum');
+Route::get('/orders/patient/{patient_id}', [OrderController::class, 'getOrderHistoryByPatient'])->middleware('auth:sanctum');
 //get order history by doctor
-Route::get('/order/doctor/{doctor_id}', [OrderController::class, 'getOrderHistoryByDoctor'])->middleware('auth:sanctum');
+Route::get('/orders/doctor/{doctor_id}', [OrderController::class, 'getOrderHistoryByDoctor'])->middleware('auth:sanctum');
+//get order by doctor query
+Route::get('/orders/doctor/{doctor_id}/{service}/{status_service}', [OrderController::class, 'getOrderByDoctorQuery'])->middleware('auth.sanctum');
 //get order clinic
-Route::get('/order/clinic/{clinic_id}', [OrderController::class, 'getOrderHistoryByClinic'])->middleware('auth:sanctum');
-//get clinic summary
-Route::get('/order/clinic/summary/{clinic_id}', [OrderController::class, 'getSummaryByClinic'])->middleware('auth:sanctum');
-
+Route::get('/orders/clinic/{clinic_id}', [OrderController::class, 'getOrderHistory'])->middleware('auth:sanctum');
 //xendit callback
-Route::post('/order/callback', [OrderController::class, 'handleXenditCallback']);
+Route::post('/orders/xendit-callback', [OrderController::class, 'handleXenditCallback']);
+
+//get specialist
+Route::get('/specialists', [SpecialistController::class, "index"]);
+
+//get clinic by id
+Route::get('/clinic/{id}', [DoctorController::class, "getClinicById"])->middleware('auth:sanctum');
+
+//get doctors by clinic_id
+Route::get('/clinic/doctors/{clinic_id}', [DoctorController::class, 'getDoctorByClinic'])->middleware('auth:sanctum');

@@ -16,7 +16,7 @@ return new class extends Migration
             //patient_id
             $table->foreignId('patient_id')->constrained('users')->onDelete('cascade');
             // doctor_id
-            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');;
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
             // service
             $table->string('service');
             // price
@@ -24,7 +24,7 @@ return new class extends Migration
             // payment_url
             $table->string('payment_url')->nullable();
             // status
-            $table->enum('status', ['waiting', 'paid', 'cancelled'])->default('waiting');
+            $table->enum('status', ['PENDING', 'PAID', 'EXPIRED'])->default('PENDING');
             //duration
             $table->integer('duration');
             //clinic_id

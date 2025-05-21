@@ -16,13 +16,17 @@
     ],
     "require": {
         "php": "^8.2",
-        "xendit/xendit-php": "6.0.0",
+        "berkayk/onesignal-laravel": "^2.4",
+        "doctrine/dbal": "^4.2",
         "filament/filament": "^3.2",
+        "google/apiclient": "^2.18",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "xendit/xendit-php": "6.4.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.5",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",

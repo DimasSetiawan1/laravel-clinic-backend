@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use OneSignal;
 use Xendit\Configuration;
 use Xendit\Invoice\CreateInvoiceRequest;
 use Xendit\Invoice\InvoiceApi;
@@ -34,25 +37,24 @@ class OrderController extends Controller
             'clinic_id' => 'required',
             'schedule' => 'required'
         ]);
-        $data = $request->all();
-        $order = Order::create($data);
-
-        $key = config('services.xendit.server_key');
-        Configuration::setXenditKey($key);
-
-        $apiInstance = new InvoiceApi();
-        $create_invoice_request = new CreateInvoiceRequest([
-            'external_id' => 'INV-' . $order->id,
-            'description' => 'Payment for ' . $order->service,
-            'amount' => $order->price,
-            'invoice_duration' => 172800,
-            'currency' => 'IDR',
-            'reminder_time' => 1,
-            'success_redirect_url' => 'flutter/success',
-            'failure_redirect_url' => 'flutter/failure',
-        ]);
 
         try {
+
+            $key = config('services.xendit.server_key');
+            Configuration::setXenditKey($key);
+            $data = $request->all();
+            $order = Order::create($data);
+            $apiInstance = new InvoiceApi();
+            $create_invoice_request = new CreateInvoiceRequest([
+                'external_id' => 'INV-' . $order->id,
+                'description' => 'Payment for ' . $order->service,
+                'amount' => $order->price,
+                'invoice_duration' => 86400,
+                'currency' => 'IDR',
+                'reminder_time' => 1,
+                'success_redirect_url' => 'flutter/success',
+                'failure_redirect_url' => 'flutter/failure',
+            ]);
             $result = $apiInstance->createInvoice($create_invoice_request);
             $payment_url = $result->getInvoiceUrl();
             $order->payment_url = $payment_url;
@@ -65,7 +67,8 @@ class OrderController extends Controller
         } catch (XenditSdkException $e) {
             return response()->json([
                 'status' => 'Failed',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'details' => $e->getFullError(),
             ], 400);
         }
     }
@@ -74,8 +77,8 @@ class OrderController extends Controller
     public function handleXenditCallback(Request $request)
     {
         $xenditCallbackToken = config('services.xendit.callback_token');
-        $callbackToken = $request->header('X-CALLBACK-TOKEN');
-        if ($callbackToken !== $xenditCallbackToken) {
+        $callbackToken = $request->header('X-Callback-Token');
+        if (!hash_equals($xenditCallbackToken, $callbackToken)) {
             return response()->json([
                 'status' => 'Failed',
                 'message' => 'Unauthorized'
@@ -84,11 +87,27 @@ class OrderController extends Controller
         $data = $request->all();
         $externalId = $data['external_id'];
         $order = Order::where('id', explode('-', $externalId)[1])->first();
+        if (empty($order)) {
+            return response()->json([
+                'status' => 'Failed',
+                'message' => 'Order not found'
+            ], 404);
+        }
+        $doctor = User::find($order->doctor_id);
         $order->status = $data['status'];
+        $order->status_service = "ACTIVE";
         $order->save();
+        OneSignal::sendNotificationToUser(
+            "You Have a New " . $order->service . " from " . $order->patient->name,
+            $doctor->one_signal_token,
+            $url = null,
+            $data = null,
+            $buttons = null,
+            $schedule = null
+        );
         return response()->json([
             'status' => 'Success',
-            'data' => $order
+            'message' => 'Payment Success'
         ], 200);
     }
 
@@ -114,7 +133,7 @@ class OrderController extends Controller
     }
 
     //get order history by clinic desc
-    public function getOrderHistoryByClinic($clinic_id)
+    public function getOrderHistory($clinic_id)
     {
         $order = Order::where('clinic_id', $clinic_id)->with('patient', 'doctor', 'clinic')->orderBy('created_at', 'desc')->get();
         return response()->json([
@@ -123,22 +142,17 @@ class OrderController extends Controller
         ], 200);
     }
 
-    // get admin clinic summary
-    public function getSummary($clinic_id)
+
+
+    public function getOrderByDoctorQuery($doctor_id, $service, $status_service)
     {
-        $orders = Order::where('clinic_id', $clinic_id)->with('clinic', 'patient', 'doctor')->get();
-        $orderCount = $orders->count();
-        $totalIncome = $orders->where('status', 'paid')->sum('price');
-        $doctorCount = $orders->groupBy('doctor_id')->count();
-        $patientCount = $orders->groupBy('patient_id')->count();
+        $search = Order::where('doctor_id', $doctor_id)
+            ->where('service', $service)
+            ->where('status_service', $status_service)
+            ->with('doctor', 'clinic', 'patient')->orderBy('created_at', 'desc')->get();
         return response()->json([
             'status' => 'Success',
-            'data' => [
-                'order_count' => $orderCount,
-                'total_income' => $totalIncome,
-                'doctor_count' => $doctorCount,
-                'patient_count' => $patientCount
-            ]
-        ], 200);
+            'data' => $search
+        ]);
     }
 }

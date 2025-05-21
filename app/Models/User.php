@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Storage;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
-
 
 
     /**
@@ -33,6 +33,7 @@ class User extends Authenticatable implements FilamentUser
         'address',
         'phone_number',
         'gender',
+        'image',
         'certification',
         'telemedicine_fee',
         'clinic_id',
@@ -41,6 +42,13 @@ class User extends Authenticatable implements FilamentUser
         'specialist_id'
 
     ];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image
+            ? Storage::disk('public')->url($this->image)
+            : null;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -60,6 +68,13 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsTo(Specialist::class, 'specialist_id');
     }
+
+    /**
+     * Determine if the user can access the given panel.
+     *
+     * @param  \Filament\Panel  $panel
+     * @return bool
+     */
 
     public function canAccessPanel(Panel $panel): bool
     {

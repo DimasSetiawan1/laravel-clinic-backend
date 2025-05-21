@@ -15,6 +15,7 @@ class Order extends Model
         'duration',
         'clinic_id',
         'schedule',
+        'status',
     ];
 
     public function patient()

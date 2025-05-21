@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // status [active,inactive]
-            $table->enum('status', ['active', 'inactive'])->after('email')->default('active');
+            $table->string('one_signal_token')->nullable();
         });
     }
 
@@ -23,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->string('one_signal_token')->nullable();
         });
     }
 };

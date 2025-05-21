@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Google_client;
 
 class UserController extends Controller
 {
@@ -85,6 +86,27 @@ class UserController extends Controller
             ], 404);
         }
     }
+    //update Token One Signal
+    public function updateToken(Request $request, User $user)
+    {
+        $request->validate([
+            'one_signal_token' => 'required'
+        ]);
+
+        try {
+            $user->one_signal_token = $request->one_signal_token;
+            $user->save();
+            return response()->json([
+                'status' => 'Success',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th
+            ]);
+        }
+    }
+
 
     // login
     public function login(Request $request)
@@ -152,5 +174,61 @@ class UserController extends Controller
             'data' => $user,
             'token' => $user->createToken('auth_token')->plainTextToken,
         ], 200);
+    }
+
+    public function loginGoogle(Request $request)
+    {
+        $idToken = $request->id_token;
+        $client = new Google_Client([
+            'client_id' => env('GOOGLE_CLIENT_ID')
+        ]);
+
+        $payload = $client->verifyIdToken($idToken);
+
+        if ($payload) {
+            $googleId = $payload['sub'];
+            $email = $payload['email'];
+            $name = $payload['name'];
+            $picture = $payload['picture'];
+
+            $user = User::where('email', $email)->first();
+            if ($user) {
+                $user->google_id = $googleId;
+                $user->save();
+                $token = $user->createToken('auth_token')->plainTextToken;
+                return response()->json([
+                    'status' => 'success',
+                    'data' => [
+                        'user' => $user,
+                        'is_new' => false,
+                        'token' => $token
+                    ]
+                ]);
+            } else {
+                $user = User::create([
+                    'name' => $name,
+                    'email' => $email,
+                    'gooogle_id' => $googleId,
+                    'image' => $picture,
+                    'password' => Hash::make('Password'),
+                    'role' => 'patient'
+                ]);
+                $token = $user->createToken('auth_token')->plainTextToken;
+
+                return response()->json([
+                    'status' => 'success',
+                    'data' => [
+                        'user' => $user,
+                        'is_new' => true,
+                        'token' => $token
+                    ]
+                ], 201);
+            }
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'invalid Google id token'
+            ], 401);
+        }
     }
 }

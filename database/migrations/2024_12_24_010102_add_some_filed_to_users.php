@@ -25,9 +25,9 @@ return new class extends Migration
             $table->integer('chat_fee')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->foreignId('clinic_id')->nullable()->constrained('clinics')->onDelete('set null');
+            $table->foreignId('clinic_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('image')->nullable();
-            $table->foreignId('specialist_id')->nullable()->constrained('specialization')->onDelete('set null');
+            $table->foreignId('specialist_id')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 

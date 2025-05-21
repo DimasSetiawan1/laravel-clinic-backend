@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // status [active,inactive]
-            $table->enum('status', ['active', 'inactive'])->after('email')->default('active');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('status_service')->nullable();
         });
     }
 
-    /**
+    /**$table->dropColumn('status_service');
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('status_service');
+            $table->dropColumn('birth_date');
         });
     }
 };
