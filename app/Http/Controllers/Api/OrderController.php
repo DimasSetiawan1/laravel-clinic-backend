@@ -116,7 +116,7 @@ class OrderController extends Controller
                 $chat_rooms = ChatRooms::create([
                     'id' => (string) \Illuminate\Support\Str::uuid(),
                     'doctors_id' => $order->doctor_id,
-                    'patients_id' => $order->patient_id,
+                    'users_id' => $order->patient_id,
                     'orders_id' => $order->id
                 ]);
             }
