@@ -15,7 +15,7 @@ namespace App\Models{
 /**
  * 
  *
- * @property int $id
+ * @property string $id
  * @property int $orders_id
  * @property int $users_id
  * @property int $doctors_id
