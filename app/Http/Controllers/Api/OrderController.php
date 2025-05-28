@@ -109,7 +109,7 @@ class OrderController extends Controller
             empty($order->chat_room_id)
         ) {
             $chat_rooms = ChatRooms::where('doctors_id', $order->doctor_id)
-                ->where('patients_id', $order->patient_id)
+                ->where('users_id', $order->patient_id)
                 ->where('orders_id', $order->id)
                 ->first();
             if (!$chat_rooms) {
