@@ -85,6 +85,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string|null $chat_room_id
  * @property int $patient_id
  * @property int $doctor_id
  * @property string $service
@@ -103,6 +104,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereChatRoomId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereClinicId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereDoctorId($value)
@@ -154,7 +156,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $role
  * @property string|null $google_id
- * @property int|null $ktp_number
+ * @property string|null $ktp_number
  * @property string|null $phone_number
  * @property string|null $address
  * @property string|null $birth_date
