@@ -112,9 +112,6 @@ class OrderController extends Controller
                 ->where('patients_id', $order->patient_id)
                 ->where('orders_id', $order->id)
                 ->first();
-            $chat_rooms['id'] = (string) \Illuminate\Support\Str::uuid();
-            $chat_rooms->save();
-
             if (!$chat_rooms) {
                 $chat_rooms = ChatRooms::create([
                     'id' => (string) \Illuminate\Support\Str::uuid(),
@@ -123,6 +120,8 @@ class OrderController extends Controller
                     'orders_id' => $order->id
                 ]);
             }
+            $chat_rooms['id'] = (string) \Illuminate\Support\Str::uuid();
+            $chat_rooms->save();
             $order->chat_room_id = $chat_rooms->id;
             $roomId = $this->firebaseChatService->createRoom($chat_rooms->id, $order->doctor_id, $order->patient_id);
         }
