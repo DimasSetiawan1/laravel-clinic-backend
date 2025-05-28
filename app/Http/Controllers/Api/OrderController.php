@@ -108,10 +108,9 @@ class OrderController extends Controller
             $data['status'] === 'PAID' &&
             empty($order->chat_room_id)
         ) {
-
-            $chat_rooms = ChatRooms::where('doctor_id', $order->doctor_id)
-                ->where('patient_id', $order->patient_id)
-                ->where('order_id', $order->id)
+            $chat_rooms = ChatRooms::where('doctors_id', $order->doctor_id)
+                ->where('patients_id', $order->patient_id)
+                ->where('orders_id', $order->id)
                 ->first();
             $chat_rooms['id'] = (string) \Illuminate\Support\Str::uuid();
             $chat_rooms->save();
@@ -119,9 +118,9 @@ class OrderController extends Controller
             if (!$chat_rooms) {
                 $chat_rooms = ChatRooms::create([
                     'id' => (string) \Illuminate\Support\Str::uuid(),
-                    'doctor_id' => $order->doctor_id,
-                    'patient_id' => $order->patient_id,
-                    'order_id' => $order->id
+                    'doctors_id' => $order->doctor_id,
+                    'patients_id' => $order->patient_id,
+                    'orders_id' => $order->id
                 ]);
             }
             $order->chat_room_id = $chat_rooms->id;
