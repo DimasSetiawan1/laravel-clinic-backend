@@ -7,6 +7,7 @@ use App\Models\ChatRooms;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\FirebaseChatService;
+use Google\Cloud\Firestore\V1\FirestoreClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use OneSignal;
@@ -108,10 +109,16 @@ class OrderController extends Controller
             $data['status'] === 'PAID' &&
             empty($order->chat_room_id)
         ) {
+            $firestore = new FirestoreClient([
+                'projectId' => 'clinic-apps-25116',
+                'keyFilePath' => storage_path('app/clinic-apps.json'),
+            ]);
             $chat_rooms = ChatRooms::where('doctors_id', $order->doctor_id)
                 ->where('users_id', $order->patient_id)
                 ->where('orders_id', $order->id)
                 ->first();
+
+
             if (!$chat_rooms) {
                 $chat_rooms = ChatRooms::create([
                     'id' => (string) \Illuminate\Support\Str::uuid(),
@@ -123,7 +130,11 @@ class OrderController extends Controller
             $chat_rooms['id'] = (string) \Illuminate\Support\Str::uuid();
             $chat_rooms->save();
             $order->chat_room_id = $chat_rooms->id;
-            $roomId = $this->firebaseChatService->createRoom($chat_rooms->id, $order->doctor_id, $order->patient_id);
+            $firestore->collection('chat_rooms')->document($chat_rooms->id)->set([
+                'doctors_id' => $order->doctor_id,
+                'users_id' => $order->patient_id,
+                'created_at' => now()->toDateTimeString(),
+            ]);
         }
         $order->status = $data['status'];
         $order->status_service = "ACTIVE";
