@@ -16,6 +16,38 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $orders_id
+ * @property int $users_id
+ * @property int $doctors_id
+ * @property string $status
+ * @property string|null $closed_at
+ * @property string|null $closed_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $doctor
+ * @property-read \App\Models\Order|null $order
+ * @property-read \App\Models\User|null $patient
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereClosedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereClosedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereDoctorsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereOrdersId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms whereUsersId($value)
+ */
+	class ChatRooms extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $name
  * @property string $address
  * @property string $phone_number
@@ -65,14 +97,12 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $status_service
- * @property string|null $birth_date
  * @property-read \App\Models\Clinic $clinic
  * @property-read \App\Models\User $doctor
  * @property-read \App\Models\User $patient
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereBirthDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereClinicId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereDoctorId($value)

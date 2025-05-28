@@ -36,6 +36,7 @@ class User extends Authenticatable implements FilamentUser
         'image',
         'certification',
         'telemedicine_fee',
+        'chat_fee',
         'clinic_id',
         'end_time',
         'start_time',

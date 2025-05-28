@@ -37,7 +37,7 @@ Route::get('/clinic/doctor', [DoctorController::class, 'index'])->middleware('au
 Route::post('/clinic/doctor', [DoctorController::class, 'store'])->middleware('auth:sanctum');
 
 //update doctor
-Route::post('/clinic/doctor/{user}', [DoctorController::class, 'update'])->middleware('auth:sanctum');
+Route::put('/clinic/doctor/{user}', [DoctorController::class, 'update'])->middleware('auth:sanctum');
 
 //delete doctor
 Route::delete('/clinic/doctor/{user}', [DoctorController::class, 'destroy'])->middleware('auth:sanctum');
@@ -69,7 +69,7 @@ Route::get('/orders/patient/{patient_id}', [OrderController::class, 'getOrderHis
 //get order history by doctor
 Route::get('/orders/doctor/{doctor_id}', [OrderController::class, 'getOrderHistoryByDoctor'])->middleware('auth:sanctum');
 //get order by doctor query
-Route::get('/orders/doctor/{doctor_id}/{service}/{status_service}', [OrderController::class, 'getOrderByDoctorQuery'])->middleware('auth.sanctum');
+Route::get('/orders/doctor/{doctor_id}/{service}/{status_service}', [OrderController::class, 'getOrderByDoctorQuery'])->middleware('auth:sanctum');
 //get order clinic
 Route::get('/orders/clinic/{clinic_id}', [OrderController::class, 'getOrderHistory'])->middleware('auth:sanctum');
 //xendit callback

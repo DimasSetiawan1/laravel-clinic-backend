@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChatRooms;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\FirebaseChatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use OneSignal;
@@ -15,6 +17,13 @@ use Xendit\XenditSdkException;
 
 class OrderController extends Controller
 {
+    protected $firebaseChatService;
+
+    public function __construct(FirebaseChatService $firebaseChatService)
+    {
+        $this->firebaseChatService = $firebaseChatService;
+    }
+
     //index
     public function index()
     {
@@ -94,14 +103,29 @@ class OrderController extends Controller
             ], 404);
         }
         $doctor = User::find($order->doctor_id);
+        if (
+            strtolower($order->service) == 'chat' &&
+            $data['status'] === 'PAID' &&
+            empty($order->chat_room_id)
+        ) {
+
+            $chat_rooms = ChatRooms::create([
+                'doctor_id' => $order->doctor_id,
+                'patient_id' => $order->patient_id,
+                'order_id' => $order->id
+            ]);
+            $order->chat_room_id = $chat_rooms->id;
+            $roomId = $this->firebaseChatService->createRoom($chat_rooms->id, $order->doctor_id, $order->patient_id);
+        }
         $order->status = $data['status'];
         $order->status_service = "ACTIVE";
+
         $order->save();
         OneSignal::sendNotificationToUser(
             "You Have a New " . $order->service . " from " . $order->patient->name,
             $doctor->one_signal_token,
             $url = null,
-            $data = null,
+            ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
             $buttons = null,
             $schedule = null
         );

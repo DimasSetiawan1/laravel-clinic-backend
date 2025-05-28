@@ -162,7 +162,7 @@ class DoctorController extends Controller
         $clinicImage = $clinic->image;
         $totalDoctor = User::where('clinic_id', $id)->where('role', 'doctor')->count();
         $totalPatient = Order::where('clinic_id', $id)->count();
-        $totalIncome = Order::where('clinic_id', $id)->where('status', 'Success')->sum('price');
+        $totalIncome = Order::where('clinic_id', $id)->where('status', 'PAID')->sum('price');
         return response()->json([
             'status' => 'success',
             'data' => [

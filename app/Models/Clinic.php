@@ -18,4 +18,5 @@ class Clinic extends Model
         'image',
         'spesialis',
     ];
+    
 }
