@@ -113,15 +113,11 @@ class OrderController extends Controller
             $data['status'] === 'PAID' &&
             empty($order->chat_room_id)
         ) {
-            // $firestore = new FirestoreClient([
-            //     'projectId' => 'clinic-apps-25116',
-            //     'keyFilePath' => storage_path('storage/app/clinic-apps.json'),
-            // ]);
+
             $chat_rooms = ChatRooms::where('doctors_id', $order->doctor_id)
                 ->where('users_id', $order->patient_id)
                 ->where('orders_id', $order->id)
                 ->first();
-            \Log::info('Search Firestore chat room');
 
 
             if (!$chat_rooms) {
@@ -131,39 +127,35 @@ class OrderController extends Controller
                     'users_id' => $order->patient_id,
                     'orders_id' => $order->id
                 ]);
-                \Log::info('Firestore chat room created: ' . $chat_rooms->id);
             } else {
                 $chat_rooms['id'] = (string) \Illuminate\Support\Str::uuid();
                 $chat_rooms->save();
-                \Log::info('Firestore chat room already exists: ' . $chat_rooms->id);
             }
 
             $order->chat_room_id = $chat_rooms->id;
-            \Log::info('Order chat room ID set: ' . $order->chat_room_id);
             try {
                 $this->firestoreService->createChatRoom(
                     $chat_rooms->id,
-                    $order->doctor_id,
-                    $order->patient_id
                 );
-                \Log::info('Firestore chat room created successfully');
             } catch (\Exception $e) {
-                \Log::error('Failed to create Firestore chat room: ' . $e->getMessage());
-                // Lanjutkan eksekusi tanpa error
+                return response()->json([
+                    'status' => 'Failed',
+                    'message' => 'Failed to create chat room in Firestore: ' . $e->getMessage()
+                ], 500);
             }
         }
         $order->status = $data['status'];
         $order->status_service = "ACTIVE";
 
         $order->save();
-        // OneSignal::sendNotificationToUser(
-        //     "You Have a New " . $order->service . " from " . $order->patient->name,
-        //     $doctor->one_signal_token,
-        //     $url = null,
-        //     ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
-        //     $buttons = null,
-        //     $schedule = null
-        // );
+        OneSignal::sendNotificationToUser(
+            "You Have a New " . $order->service . " from " . $order->patient->name,
+            $doctor->one_signal_token,
+            $url = null,
+            ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
+            $buttons = null,
+            $schedule = null
+        );
         return response()->json([
             'status' => 'Success',
             'message' => 'Payment Success'
