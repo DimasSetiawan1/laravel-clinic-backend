@@ -24,7 +24,7 @@ Route::put('/user/{id}',  [UserController::class, 'update']);
 Route::post('/login/google', [UserController::class, 'loginGoogle']);
 
 // update token one signal untuk push notif dll
-Route::put('/update-token/{user}', [UserController::class, 'updateToken']);
+Route::post('/users/{user}/update-token', [UserController::class, 'updateToken'])->middleware('auth:sanctum');
 
 
 
