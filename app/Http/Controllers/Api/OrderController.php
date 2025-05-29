@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ChatRooms;
 use App\Models\Order;
 use App\Models\User;
-use App\Services\FirebaseChatService;
 use Google\Cloud\Firestore\V1\FirestoreClient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use OneSignal;
 use Xendit\Configuration;
 use Xendit\Invoice\CreateInvoiceRequest;
@@ -18,12 +16,6 @@ use Xendit\XenditSdkException;
 
 class OrderController extends Controller
 {
-    protected $firebaseChatService;
-
-    public function __construct(FirebaseChatService $firebaseChatService)
-    {
-        $this->firebaseChatService = $firebaseChatService;
-    }
 
     //index
     public function index()

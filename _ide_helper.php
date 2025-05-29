@@ -5,7 +5,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 11.44.7.
+ * Generated for Laravel 11.45.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -11942,6 +11942,7 @@ namespace Illuminate\Support\Facades {
      * @method static void deleteToken(\Illuminate\Contracts\Auth\CanResetPassword $user)
      * @method static bool tokenExists(\Illuminate\Contracts\Auth\CanResetPassword $user, string $token)
      * @method static \Illuminate\Auth\Passwords\TokenRepositoryInterface getRepository()
+     * @method static \Illuminate\Support\Timebox getTimebox()
      * @see \Illuminate\Auth\Passwords\PasswordBrokerManager
      * @see \Illuminate\Auth\Passwords\PasswordBroker
      */
@@ -22773,58 +22774,6 @@ namespace Berkayk\OneSignal {
             }
     }
 
-namespace Kreait\Laravel\Firebase\Facades {
-    /**
-     * 
-     *
-     * @method static \Kreait\Firebase\Contract\AppCheck appCheck()
-     * @method static \Kreait\Firebase\Contract\Auth auth()
-     * @method static \Kreait\Firebase\Contract\Database database()
-     * @method static \Kreait\Firebase\Contract\DynamicLinks dynamicLinks()
-     * @method static \Kreait\Firebase\Contract\Firestore firestore()
-     * @method static \Kreait\Firebase\Contract\Messaging messaging()
-     * @method static \Kreait\Firebase\Contract\RemoteConfig remoteConfig()
-     * @method static \Kreait\Firebase\Contract\Storage storage()
-     * @see \Kreait\Laravel\Firebase\FirebaseProjectManager
-     * @see \Kreait\Laravel\Firebase\FirebaseProject
-     */
-    class Firebase {
-        /**
-         * 
-         *
-         * @static 
-         */
-        public static function project($name = null)
-        {
-            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
-            return $instance->project($name);
-        }
-
-        /**
-         * 
-         *
-         * @static 
-         */
-        public static function getDefaultProject()
-        {
-            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
-            return $instance->getDefaultProject();
-        }
-
-        /**
-         * 
-         *
-         * @static 
-         */
-        public static function setDefaultProject($name)
-        {
-            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
-            return $instance->setDefaultProject($name);
-        }
-
-            }
-    }
-
 namespace Livewire {
     /**
      * 
@@ -31870,7 +31819,6 @@ namespace  {
     class Vite extends \Illuminate\Support\Facades\Vite {}
     class EloquentSerialize extends \AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade {}
     class OneSignal extends \Berkayk\OneSignal\OneSignalFacade {}
-    class Firebase extends \Kreait\Laravel\Firebase\Facades\Firebase {}
     class Livewire extends \Livewire\Livewire {}
 }
 
