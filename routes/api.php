@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\Api\UserController;
@@ -26,7 +27,7 @@ Route::post('/login/google', [UserController::class, 'loginGoogle']);
 // update token one signal untuk push notif dll
 Route::post('/users/{user}/update-token', [UserController::class, 'updateToken']);
 
-
+Route::post('/notification/send', [NotificationController::class, 'sendNotification'])->middleware('auth:sanctum');
 
 //doctor
 
