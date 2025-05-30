@@ -32,4 +32,8 @@ class Order extends Model
     {
         return $this->belongsTo(Clinic::class, 'clinic_id');
     }
+    public function chat_rooms()
+    {
+        return $this->belongsTo(ChatRooms::class, 'chat_room_id');
+    }
 }

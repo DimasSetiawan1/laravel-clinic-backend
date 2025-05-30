@@ -166,7 +166,7 @@ class OrderController extends Controller
     //get order history by patient desc
     public function getOrderHistoryByPatient($patient_id)
     {
-        $order = Order::where('patient_id', $patient_id)->with('patient', 'doctor', 'clinic')->orderBy('created_at', 'desc')->get();
+        $order = Order::where('patient_id', $patient_id)->with('patient', 'doctor', 'clinic', 'chat_rooms')->orderBy('created_at', 'desc')->get();
         return response()->json([
             'status' => 'Success',
             'data' => $order

@@ -24,9 +24,7 @@ namespace App\Models{
  * @property string|null $closed_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $doctor
- * @property-read \App\Models\Order|null $order
- * @property-read \App\Models\User|null $patient
+ * @property-read \App\Models\Order $order
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ChatRooms query()
@@ -98,6 +96,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $status_service
+ * @property-read \App\Models\ChatRooms|null $chat_rooms
  * @property-read \App\Models\Clinic $clinic
  * @property-read \App\Models\User $doctor
  * @property-read \App\Models\User $patient
