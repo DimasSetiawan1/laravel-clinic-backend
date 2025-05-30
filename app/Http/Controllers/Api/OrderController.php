@@ -103,7 +103,6 @@ class OrderController extends Controller
                 'message' => 'Order not found'
             ], 404);
         }
-        \Log::info('Xendit Callback Data: ' . json_encode($data));
         $doctor = User::find($order->doctor_id);
 
         if (

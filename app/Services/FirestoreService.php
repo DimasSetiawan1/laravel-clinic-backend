@@ -11,7 +11,7 @@ class FirestoreService
     public function __construct()
     {
         try {
-            $this->firestore = new FirestoreClient(env('GOOGLE_CLIENT_ID'), env('GOOGLE_SECRET_KEY'), [
+            $this->firestore = new FirestoreClient(env('GOOGLE_PROJECT_ID'), env('GOOGLE_SECRET_KEY'), [
                 'database' => '(default)',
             ]);
         } catch (\Exception $e) {
