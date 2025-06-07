@@ -51,6 +51,15 @@ class User extends Authenticatable implements FilamentUser
             : null;
     }
 
+    public function getChatRoomsPatient()
+    {
+        return $this->hasMany(ChatRooms::class, 'users_id');
+    }
+    public function getChatRoomsDoctor()
+    {
+        return $this->hasMany(ChatRooms::class, 'doctor_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\ChatRoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,9 @@ Route::get('/doctor/specialist/{specialist_id}', [DoctorController::class, 'getD
 
 //get Doctor By id
 Route::get('/doctor/{id}', [DoctorController::class, 'getById'])->middleware('auth:sanctum');
+
+//get chat rooms by id
+Route::get('/{user}/chat-rooms', [ChatRoomController::class, 'getChatRoomsForUser'])->middleware('auth:sanctum');
 
 
 //orders
