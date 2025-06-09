@@ -43,7 +43,7 @@ class ChatRoomController extends Controller
                             'name' => $room->patient->name,
                             'image_url' => $room->patient->image_url,
                         ],
-                        'last_message' => $lastMessage,
+                        'details' => $lastMessage,
                         'order_id' => $room->orders_id,
                         'created_at' => $room->created_at,
                     ];
@@ -63,7 +63,7 @@ class ChatRoomController extends Controller
                             'name' => $room->doctor->name,
                             'image_url' => $room->doctor->image_url,
                         ],
-                        'last_message' => $lastMessage,
+                        'details' => $lastMessage,
                         'created_at' => $room->created_at,
                     ];
                 });
