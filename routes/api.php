@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\SpecialistController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\Api\ChatRoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

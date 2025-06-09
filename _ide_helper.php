@@ -5,7 +5,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 11.45.0.
+ * Generated for Laravel 11.45.1.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -22774,6 +22774,58 @@ namespace Berkayk\OneSignal {
             }
     }
 
+namespace Kreait\Laravel\Firebase\Facades {
+    /**
+     * 
+     *
+     * @method static \Kreait\Firebase\Contract\AppCheck appCheck()
+     * @method static \Kreait\Firebase\Contract\Auth auth()
+     * @method static \Kreait\Firebase\Contract\Database database()
+     * @method static \Kreait\Firebase\Contract\DynamicLinks dynamicLinks()
+     * @method static \Kreait\Firebase\Contract\Firestore firestore()
+     * @method static \Kreait\Firebase\Contract\Messaging messaging()
+     * @method static \Kreait\Firebase\Contract\RemoteConfig remoteConfig()
+     * @method static \Kreait\Firebase\Contract\Storage storage()
+     * @see \Kreait\Laravel\Firebase\FirebaseProjectManager
+     * @see \Kreait\Laravel\Firebase\FirebaseProject
+     */
+    class Firebase {
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function project($name = null)
+        {
+            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
+            return $instance->project($name);
+        }
+
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function getDefaultProject()
+        {
+            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
+            return $instance->getDefaultProject();
+        }
+
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function setDefaultProject($name)
+        {
+            /** @var \Kreait\Laravel\Firebase\FirebaseProjectManager $instance */
+            return $instance->setDefaultProject($name);
+        }
+
+            }
+    }
+
 namespace Livewire {
     /**
      * 
@@ -31819,15 +31871,11 @@ namespace  {
     class Vite extends \Illuminate\Support\Facades\Vite {}
     class EloquentSerialize extends \AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade {}
     class OneSignal extends \Berkayk\OneSignal\OneSignalFacade {}
+    class Firebase extends \Kreait\Laravel\Firebase\Facades\Firebase {}
     class Livewire extends \Livewire\Livewire {}
 }
 
 
-namespace Facades\Livewire\Features\SupportFileUploads {
-    /**
-     * @mixin \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl     */
-    class GenerateSignedUploadUrl extends \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl {}
-}
 
 
 
