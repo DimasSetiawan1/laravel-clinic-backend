@@ -17,6 +17,7 @@ class FirestoreService
             $this->firestore = new FirestoreClient([
                 'projectId' => env('GOOGLE_PROJECT_ID'),
                 'keyFilePath' => storage_path(env('FIREBASE_CREDENTIALS')),
+                'transport' => 'rest',
             ]);
         } catch (\Exception $e) {
             \Log::error('Error initializing Firestore client: ' . $e->getMessage());
