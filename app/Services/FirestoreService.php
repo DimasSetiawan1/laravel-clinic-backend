@@ -16,7 +16,7 @@ class FirestoreService
         try {
             $this->firestore = new FirestoreClient([
                 'projectId' => env('GOOGLE_PROJECT_ID'),
-                'keyFilePath' => env('FIREBASE_CREDENTIALS'),
+                'keyFilePath' => storage_path(env('FIREBASE_CREDENTIALS')),
             ]);
         } catch (\Exception $e) {
             \Log::error('Error initializing Firestore client: ' . $e->getMessage());
@@ -57,7 +57,7 @@ class FirestoreService
             }
             $data = $data->data();
             \Log::info('Chat room data', ['room_id' => $roomId, 'data' => $data]);
-          
+
             return [
                 'last_message' => $data['last_message'] ?? null,
                 'last_message_time' => $data['last_message_time'] ?? null,
