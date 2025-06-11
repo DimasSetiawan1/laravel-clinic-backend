@@ -62,8 +62,8 @@ class ChatRoomController extends Controller
                             'id' => $room->doctor->id,
                             'name' => $room->doctor->name,
                             'image_url' => $room->doctor->image_url,
-                            'lastMessage' => $lastMessage['lastMessage'] ?? null,
-                            'lastMessageTime' => $lastMessage['lastMessageTime'] ?? null,
+                            'lastMessage' => $lastMessage['last_message'] ?? null,
+                            'lastMessageTime' => $lastMessage['last_message_time'] ?? null,
                         ],
                         'created_at' => $room->created_at,
                     ];
