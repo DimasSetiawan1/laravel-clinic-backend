@@ -42,9 +42,9 @@ class ChatRoomController extends Controller
                             'id' => $room->patient->id,
                             'name' => $room->patient->name,
                             'image_url' => $room->patient->image_url,
+                            'lastMessage' => $lastMessage['lastMessage'] ?? null,
+                            'lastMessageTime' => $lastMessage['lastMessageTime'] ?? null,
                         ],
-                        'details' => $lastMessage,
-                        'order_id' => $room->orders_id,
                         'created_at' => $room->created_at,
                     ];
                 });
@@ -62,16 +62,18 @@ class ChatRoomController extends Controller
                             'id' => $room->doctor->id,
                             'name' => $room->doctor->name,
                             'image_url' => $room->doctor->image_url,
+                            'lastMessage' => $lastMessage['lastMessage'] ?? null,
+                            'lastMessageTime' => $lastMessage['lastMessageTime'] ?? null,
                         ],
-                        'details' => $lastMessage,
                         'created_at' => $room->created_at,
                     ];
                 });
         }
 
         return response()->json([
-            'chat_rooms' => $chatRooms,
-            'user_role' => $user->role
+            'status' => 'success',
+            'message' => 'Chat rooms retrieved successfully',
+            'chat_rooms' => $chatRooms
         ]);
     }
 }

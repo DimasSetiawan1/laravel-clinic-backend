@@ -19,7 +19,7 @@ Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanc
 
 Route::post('/user/check', [UserController::class, 'checkUser'])->middleware('auth:sanctum');
 Route::post('/user',  [UserController::class, 'store']);
-Route::get('/user{email}',  [UserController::class, 'index']);
+Route::get('/user/{email}',  [UserController::class, 'index']);
 Route::put('/user/googleid/{id}',  [UserController::class, 'updateGoogleId']);
 Route::put('/user/{id}',  [UserController::class, 'update']);
 // login with google done
