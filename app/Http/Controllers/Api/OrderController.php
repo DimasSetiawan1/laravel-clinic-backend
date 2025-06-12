@@ -131,11 +131,18 @@ class OrderController extends Controller
 
             $order->chat_room_id = $chat_rooms->id;
             try {
-                $this->firestoreService->createChatRoom(
+                $isCreate = $this->firestoreService->createChatRoom(
                     $chat_rooms->id,
                     $order->patient_id,
                     $order->doctor_id
                 );
+                if (!$isCreate) {
+                    \Log::error('Failed to create chat room in Firestore', [
+                        'chat_room_id' => $chat_rooms->id,
+                        'patient_id' => $order->patient_id,
+                        'doctor_id' => $order->doctor_id
+                    ]);
+                }
             } catch (\Exception $e) {
                 return response()->json([
                     'status' => 'Failed',
@@ -147,14 +154,14 @@ class OrderController extends Controller
         $order->status_service = "ACTIVE";
 
         $order->save();
-        OneSignal::sendNotificationToUser(
-            "You Have a New " . $order->service . " from " . $order->patient->name,
-            $doctor->one_signal_token,
-            $url = null,
-            ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
-            $buttons = null,
-            $schedule = null
-        );
+        // OneSignal::sendNotificationToUser(
+        //     "You Have a New " . $order->service . " from " . $order->patient->name,
+        //     $doctor->one_signal_token,
+        //     $url = null,
+        //     ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
+        //     $buttons = null,
+        //     $schedule = null
+        // );
         return response()->json([
             'status' => 'Success',
             'message' => 'Payment Success'
