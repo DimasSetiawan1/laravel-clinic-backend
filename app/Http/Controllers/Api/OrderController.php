@@ -130,18 +130,12 @@ class OrderController extends Controller
 
             $order->chat_room_id = $chat_rooms->id;
             try {
-                $isCreate = $this->firestoreService->createChatRoom(
+                $this->firestoreService->createChatRoom(
                     $chat_rooms->id,
                     $order->patient_id,
                     $order->doctor_id
                 );
-                if (!$isCreate) {
-                    \Log::error('Failed to create chat room in Firestore', [
-                        'chat_room_id' => $chat_rooms->id,
-                        'patient_id' => $order->patient_id,
-                        'doctor_id' => $order->doctor_id
-                    ]);
-                }
+
             } catch (\Exception $e) {
                 return response()->json([
                     'status' => 'Failed',
