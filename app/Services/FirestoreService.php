@@ -57,6 +57,10 @@ class FirestoreService
                 return null;
             }
             foreach ($documents as $document) {
+                \Log::info('Fetching last message from chat room', [
+                    'room_id' => $roomId,
+                    'document' => $document,
+                ]);
                 if ($document->exists()) {
                     $data = $document->data();
                     return [
@@ -65,7 +69,6 @@ class FirestoreService
                     ];
                 }
             }
-            \Log::warning('No messages found in chat room', ['room_id' => $roomId]);
         } catch (\Exception $e) {
             \Log::error('Error fetching chat room: ' . $e->getMessage());
             return null;
