@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Google\Cloud\Firestore\FirestoreClient;
-
+use Symfony\Polyfill\Uuid\Uuid;
 
 class FirestoreService
 {
@@ -25,20 +26,20 @@ class FirestoreService
         }
     }
 
-    public function createChatRoom($roomId)
+    public function createChatRoom(Uuid $roomId, User $patientId, User $doctorId): bool
     {
         try {
             $this->firestore->setDocument(
                 $this->collectionName . "/$roomId",
                 [
-                    'id' => $roomId,
+                    'participant_id' => [
+                        'patient_id' => $patientId->id,
+                        'doctor_id' => $doctorId->id,
+                    ],
                     'created_at' => date('Y-m-d H:i:s'),
                 ],
                 null,
                 null,
-                // {
-
-                // }
             );
             return true;
         } catch (\Exception $e) {

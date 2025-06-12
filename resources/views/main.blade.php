@@ -83,14 +83,16 @@
     <ul>
         <li><span class="method">POST</span> <code>/login</code> — Login user</li>
         <li><span class="method">POST</span> <code>/login/google</code> — Login with Google</li>
-        <li><span class="method">POST</span> <code>/logout</code> <span class="auth">(Authentication Required)</span> — Logout user
+        <li><span class="method">POST</span> <code>/logout</code> <span class="auth">(Authentication Required)</span> —
+            Logout user
         </li>
     </ul>
 
     <h2>User</h2>
     <ul>
         <li><span class="method">POST</span> <code>/user</code> — Register user</li>
-        <li><span class="method">POST</span> <code>/user/check</code> <span class="auth">(Authentication Required)</span> — Check
+        <li><span class="method">POST</span> <code>/user/check</code> <span class="auth">(Authentication
+                Required)</span> — Check
             user</li>
         <li><span class="method">GET</span> <code>/user{email}</code> — Get user by email</li>
         <li><span class="method">PUT</span> <code>/user/googleid/{id}</code> — Update Google ID</li>
@@ -100,65 +102,75 @@
 
     <h2>Doctor</h2>
     <ul>
-        <li><span class="method">GET</span> <code>/clinic/doctor</code> <span class="auth">(Authentication Required)</span> —
+        <li><span class="method">GET</span> <code>/clinic/doctor</code> <span class="auth">(Authentication
+                Required)</span> —
             List all doctors</li>
-        <li><span class="method">POST</span> <code>/clinic/doctor</code> <span class="auth">(Authentication Required)</span> —
+        <li><span class="method">POST</span> <code>/clinic/doctor</code> <span class="auth">(Authentication
+                Required)</span> —
             Add doctor</li>
-        <li><span class="method">PUT</span> <code>/clinic/doctor/{user}</code> <span
-                class="auth">(Authentication Required)</span> — Update doctor</li>
-        <li><span class="method">DELETE</span> <code>/clinic/doctor/{user}</code> <span
-                class="auth">(Authentication Required)</span> — Delete doctor</li>
+        <li><span class="method">PUT</span> <code>/clinic/doctor/{user}</code> <span class="auth">(Authentication
+                Required)</span> — Update doctor</li>
+        <li><span class="method">DELETE</span> <code>/clinic/doctor/{user}</code> <span class="auth">(Authentication
+                Required)</span> — Delete doctor</li>
         <li><span class="method">GET</span> <code>/clinic/doctor/active</code> — Get active doctors</li>
-        <li><span class="method">GET</span> <code>/doctor/search/</code> <span class="auth">(Authentication Required)</span> —
+        <li><span class="method">GET</span> <code>/doctor/search/</code> <span class="auth">(Authentication
+                Required)</span> —
             Search doctor</li>
-        <li><span class="method">GET</span> <code>/doctor/clinic/{clinic_id}</code> <span
-                class="auth">(Authentication Required)</span> — Get doctor by clinic</li>
+        <li><span class="method">GET</span> <code>/doctor/clinic/{clinic_id}</code> <span class="auth">(Authentication
+                Required)</span> — Get doctor by clinic</li>
         <li><span class="method">GET</span> <code>/doctor/specialist/{specialist_id}</code> <span
                 class="auth">(Authentication Required)</span> — Get doctor by specialist</li>
-        <li><span class="method">GET</span> <code>/doctor/{id}</code> <span class="auth">(Authentication Required)</span> — Get
+        <li><span class="method">GET</span> <code>/doctor/{id}</code> <span class="auth">(Authentication
+                Required)</span> — Get
             doctor by ID</li>
     </ul>
 
     <h2>Chat Room</h2>
     <ul>
-        <li><span class="method">GET</span> <code>/{user}/chat-rooms</code> <span class="auth">(Authentication Required)</span> —
+        <li><span class="method">GET</span> <code>/{user}/chat-rooms</code> <span class="auth">(Authentication
+                Required)</span> —
             Get chat rooms for user</li>
     </ul>
 
     <h2>Order</h2>
     <ul>
-        <li><span class="method">GET</span> <code>/orders</code> <span class="auth">(Authentication Required)</span> — List all
+        <li><span class="method">GET</span> <code>/orders</code> <span class="auth">(Authentication Required)</span> —
+            List all
             orders</li>
-        <li><span class="method">POST</span> <code>/orders</code> <span class="auth">(Authentication Required)</span> — Create
+        <li><span class="method">POST</span> <code>/orders</code> <span class="auth">(Authentication Required)</span>
+            — Create
             order</li>
         <li><span class="method">GET</span> <code>/orders/patient/{patient_id}</code> <span
                 class="auth">(Authentication Required)</span> — Order history by patient</li>
-        <li><span class="method">GET</span> <code>/orders/doctor/{doctor_id}</code> <span
-                class="auth">(Authentication Required)</span> — Order history by doctor</li>
+        <li><span class="method">GET</span> <code>/orders/doctor/{doctor_id}</code> <span class="auth">(Authentication
+                Required)</span> — Order history by doctor</li>
         <li><span class="method">GET</span> <code>/orders/doctor/{doctor_id}/{service}/{status_service}</code> <span
                 class="auth">(Authentication Required)</span> — Order by doctor query</li>
-        <li><span class="method">GET</span> <code>/orders/clinic/{clinic_id}</code> <span
-                class="auth">(Authentication Required)</span> — Order history by clinic</li>
+        <li><span class="method">GET</span> <code>/orders/clinic/{clinic_id}</code> <span class="auth">(Authentication
+                Required)</span> — Order history by clinic</li>
         <li><span class="method">POST</span> <code>/orders/xendit-callback</code> — Xendit callback</li>
     </ul>
 
     <h2>Notification</h2>
     <ul>
-        <li><span class="method">POST</span> <code>/notification/send</code> <span class="auth">(Authentication Required)</span>
+        <li><span class="method">POST</span> <code>/notification/send</code> <span class="auth">(Authentication
+                Required)</span>
             — Send notification</li>
     </ul>
 
     <h2>Specialist & Clinic</h2>
     <ul>
         <li><span class="method">GET</span> <code>/specialists</code> — List all specialists</li>
-        <li><span class="method">GET</span> <code>/clinic/{id}</code> <span class="auth">(Authentication Required)</span> — Get
+        <li><span class="method">GET</span> <code>/clinic/{id}</code> <span class="auth">(Authentication
+                Required)</span> — Get
             clinic by ID</li>
         <li><span class="method">GET</span> <code>/clinic/doctors/{clinic_id}</code> <span
                 class="auth">(Authentication Required)</span> — Get doctors by clinic</li>
     </ul>
 
     <div class="note">
-        <b>Note:</b> Endpoint dengan label <span class="auth">(Authentication Required)</span> membutuhkan autentikasi token
+        <b>Note:</b> Endpoint dengan label <span class="auth">(Authentication Required)</span> membutuhkan autentikasi
+        token
         Sanctum.
     </div>
 </body>

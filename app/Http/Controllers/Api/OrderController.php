@@ -133,6 +133,8 @@ class OrderController extends Controller
             try {
                 $this->firestoreService->createChatRoom(
                     $chat_rooms->id,
+                    $order->patient_id,
+                    $order->doctor_id
                 );
             } catch (\Exception $e) {
                 return response()->json([
