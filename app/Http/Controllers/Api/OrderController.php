@@ -107,7 +107,7 @@ class OrderController extends Controller
 
         if (
             strtolower($order->service) == 'chat' &&
-            $data['status'] === 'PAID' &&
+            $data['status'] == 'PAID' &&
             empty($order->chat_room_id)
         ) {
 
@@ -115,7 +115,6 @@ class OrderController extends Controller
                 ->where('users_id', $order->patient_id)
                 ->where('orders_id', $order->id)
                 ->first();
-
 
             if (!$chat_rooms) {
                 $chat_rooms = ChatRooms::create([

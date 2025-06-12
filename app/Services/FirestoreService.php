@@ -26,7 +26,7 @@ class FirestoreService
         }
     }
 
-    public function createChatRoom(Uuid $roomId, User $patientId, User $doctorId): bool
+    public function createChatRoom(string $roomId, User $patientId, User $doctorId): bool
     {
         try {
             $this->firestore
