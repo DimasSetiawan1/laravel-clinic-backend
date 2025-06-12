@@ -29,18 +29,16 @@ class FirestoreService
     public function createChatRoom(Uuid $roomId, User $patientId, User $doctorId): bool
     {
         try {
-            $this->firestore->setDocument(
-                $this->collectionName . "/$roomId",
-                [
+            $this->firestore
+                ->collection($this->collectionName)
+                ->document((string) $roomId)
+                ->set([
                     'participant_id' => [
                         'patient_id' => $patientId->id,
                         'doctor_id' => $doctorId->id,
                     ],
-                    'created_at' => date('Y-m-d H:i:s'),
-                ],
-                null,
-                null,
-            );
+                    'created_at' => now()->toDateTimeString(),
+                ]);
             return true;
         } catch (\Exception $e) {
             throw $e;

@@ -53,7 +53,6 @@ class ChatRoomController extends Controller
                 ->with('doctor')
                 ->get()
                 ->map(function ($room) {
-                    \Log::info('Fetching chat room for user', ['room_id' => $room->id]);
                     $lastMessage = $this->firestoreService->getLastMessageFromFirebase($room->id);
 
                     return [
