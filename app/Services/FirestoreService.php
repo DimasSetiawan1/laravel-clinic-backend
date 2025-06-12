@@ -44,33 +44,28 @@ class FirestoreService
             throw $e;
         }
     }
-    public function getLastMessageFromFirebase(string $roomId): ?array
+    public function getLastMessageFromFirebase(string $roomId)
     {
         try {
             $list_chat = $this->firestore->collection($this->collectionName)->document($roomId)->collection('messages');
+            $query = $list_chat->orderBy('created_at', 'desc')->limit(1);
+            $documents = $query->documents();
 
-            if (empty($list_chat)) {
+
+            if (empty($documents)) {
                 \Log::warning('Chat room document not found', ['room_id' => $roomId]);
                 return null;
             }
-            foreach ($list_chat->documents() as $document) {
-                \Log::info('Fetching last message from chat room', [
-                    'room_id' => $roomId,
-                    'document_id' => $document,
-                ]);
+            foreach ($documents as $document) {
                 if ($document->exists()) {
-                    $data[] = $document->data();
+                    $data = $document->data();
                     return [
-                        'message' => $data['message'] ?? null,
-                        'timestamp' => $data['timestamp'] ?? null,
+                        'last_message' => $data['message'] ?? null,
+                        'last_message_time' => $data['timestamp'] ?? null,
                     ];
                 }
-
-                // return [
-                //     'last_message' => $data['message'] ?? null,
-                //     'last_message_time' => $data['timestamp'] ?? null,
-                // ];
             }
+            \Log::warning('No messages found in chat room', ['room_id' => $roomId]);
         } catch (\Exception $e) {
             \Log::error('Error fetching chat room: ' . $e->getMessage());
             return null;
