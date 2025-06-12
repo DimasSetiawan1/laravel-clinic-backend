@@ -49,16 +49,13 @@ class FirestoreService
     public function getLastMessageFromFirebase(string $roomId): ?array
     {
         try {
-            \Log::info('Fetching last message from Firestore', ['room_id' => $roomId]);
             $documents = $this->firestore->collection($this->collectionName)->document($roomId);
             $data = $documents->snapshot();
-            // $snapshot = $docRef->snapshot();
             if (!$data->exists()) {
                 \Log::warning('Chat room document not found', ['room_id' => $roomId]);
                 return null;
             }
             $data = $data->data();
-            \Log::info('Chat room data', ['room_id' => $roomId, 'data' => $data]);
 
             return [
                 'last_message' => $data['last_message'] ?? null,
