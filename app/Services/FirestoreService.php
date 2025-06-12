@@ -26,7 +26,7 @@ class FirestoreService
         }
     }
 
-    public function createChatRoom(string $roomId, User $patientId, User $doctorId): bool
+    public function createChatRoom(string $roomId, int $patientId, int $doctorId): bool
     {
         try {
             $this->firestore
@@ -34,8 +34,8 @@ class FirestoreService
                 ->document((string) $roomId)
                 ->set([
                     'participant_id' => [
-                        'patient_id' => $patientId->id,
-                        'doctor_id' => $doctorId->id,
+                        'patient_id' => $patientId,
+                        'doctor_id' => $doctorId,
                     ],
                     'created_at' => now()->toDateTimeString(),
                 ]);
