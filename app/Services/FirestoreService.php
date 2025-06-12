@@ -48,7 +48,7 @@ class FirestoreService
     {
         try {
             $list_chat = $this->firestore->collection($this->collectionName)->document($roomId)->collection('messages');
-            $query = $list_chat->orderBy('created_at', 'desc')->limit(1);
+            $query = $list_chat;
             \Log::info('query :', ['query' => $query]);
 
             $documents = $query->documents();
