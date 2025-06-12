@@ -53,10 +53,12 @@ class FirestoreService
                 \Log::warning('Chat room document not found', ['room_id' => $roomId]);
                 return null;
             }
+            $lastDoc = $list_chat[0];
+            $data = $lastDoc->data();
 
             return [
-                'last_message' => $list_chat[0]['message'] ?? null,
-                'last_message_time' => $list_chat[0]['timestamp'] ?? null,
+                'last_message' => $data['message'] ?? null,
+                'last_message_time' => $data['timestamp'] ?? null,
             ];
         } catch (\Exception $e) {
             \Log::error('Error fetching chat room: ' . $e->getMessage());
