@@ -49,8 +49,10 @@ class FirestoreService
         try {
             $list_chat = $this->firestore->collection($this->collectionName)->document($roomId)->collection('messages');
             $query = $list_chat->orderBy('created_at', 'desc')->limit(1);
-            $documents = $query->documents();
+            \Log::info('query :', ['query' => $query]);
 
+            $documents = $query->documents();
+            \Log::info('Documents fetched from Firestore', ['documents_count' => $documents]);
 
             if (empty($documents)) {
                 \Log::warning('Chat room document not found', ['room_id' => $roomId]);
