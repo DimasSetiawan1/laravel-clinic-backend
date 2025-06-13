@@ -30,7 +30,6 @@ class ChatRoomController extends Controller
         }
 
         if ($user->role == 'doctor') {
-
             $chatRooms = ChatRooms::where('doctors_id', $user->id)
                 ->with(['patient', 'order'])
                 ->get()
@@ -42,8 +41,8 @@ class ChatRoomController extends Controller
                             'id' => $room->patient->id,
                             'name' => $room->patient->name,
                             'image_url' => $room->patient->image_url,
-                            'lastMessage' => $lastMessage['lastMessage'] ?? null,
-                            'lastMessageTime' => $lastMessage['lastMessageTime'] ?? null,
+                            'lastMessage' => $lastMessage['last_message'] ?? null,
+                            'lastMessageTime' => $lastMessage['last_message_time'] ?? null,
                         ],
                         'created_at' => $room->created_at,
                     ];
