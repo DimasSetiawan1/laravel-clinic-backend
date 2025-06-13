@@ -47,7 +47,11 @@ class FirestoreService
     public function getLastMessageFromFirebase(string $roomId)
     {
         try {
-            $list_chat = $this->firestore->collection($this->collectionName)->document($roomId)->collection('messages');
+            $list_chat = $this->firestore->collection($this->collectionName)
+            ->document($roomId)
+            ->collection('messages')
+            ->orderBy('timestamp', 'DESC')
+            ->limit(1);
             $query = $list_chat;
 
             $documents = $query->documents();
