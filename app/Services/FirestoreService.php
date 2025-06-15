@@ -33,10 +33,14 @@ class FirestoreService
                 ->collection($this->collectionName)
                 ->document((string) $roomId)
                 ->set([
-                    'participant_id' => [
+                    'participants' => [
                         'patient_id' => $patientId,
                         'doctor_id' => $doctorId,
                     ],
+                    'doctor_name' => User::find($doctorId)->name ?? 'Unknown Doctor',
+                    'doctor_image' => User::find($doctorId)->image ?? null,
+                    'patient_name' => User::find($patientId)->name ?? 'Unknown Patient',
+                    'patient_image' => User::find($patientId)->image ?? null,
                     'created_at' => now()->toDateTimeString(),
                 ]);
             return true;
