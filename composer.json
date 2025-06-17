@@ -25,6 +25,8 @@
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "pusher/pusher-php-server": "^7.2",
+        "taylanunutmaz/agora-token-builder": "^1.1",
         "xendit/xendit-php": "6.4.0"
     },
     "require-dev": {

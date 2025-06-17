@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgoraRoomController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OrderController;
@@ -12,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+// Agora
+Route::post('/agora/generate-token', [AgoraRoomController::class, 'generateTokenCallRoom'])
+    ->middleware('auth:sanctum');
+
+//get all call rooms
+Route::get('/agora/{user_id}/call-rooms', [AgoraRoomController::class, 'getCallRooms'])
+    ->middleware('auth:sanctum');
+//update call room status
+Route::put('/agora/{id}/call-rooms/{status}', [AgoraRoomController::class, 'updateCallRoomStatus'])
+    ->middleware('auth:sanctum');
+
 
 //user
 Route::post('/login', [UserController::class, 'login']);
@@ -59,8 +72,7 @@ Route::get('/doctor/specialist/{specialist_id}', [DoctorController::class, 'getD
 //get Doctor By id
 Route::get('/doctor/{id}', [DoctorController::class, 'getById'])->middleware('auth:sanctum');
 
-//get chat rooms by id
-Route::get('/{user}/chat-rooms', [ChatRoomController::class, 'getChatRoomsForUser'])->middleware('auth:sanctum');
+
 
 
 //orders

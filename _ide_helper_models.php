@@ -15,6 +15,39 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property string $call_room_uid
+ * @property string|null $call_token
+ * @property string|null $expired_token
+ * @property string|null $call_channel
+ * @property int $patient_id
+ * @property int $doctor_id
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $doctor
+ * @property-read \App\Models\User $patient
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereCallChannel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereCallRoomUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereCallToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereDoctorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereExpiredToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CallRoom whereUpdatedAt($value)
+ */
+	class CallRoom extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
  * @property string $id
  * @property int $orders_id
  * @property int $users_id
