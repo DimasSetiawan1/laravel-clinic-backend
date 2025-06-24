@@ -147,14 +147,16 @@ class OrderController extends Controller
         $order->status_service = "ACTIVE";
 
         $order->save();
-        OneSignal::sendNotificationToUser(
-            "You Have a New " . $order->service . " from " . $order->patient->name,
-            $doctor->one_signal_token,
-            $url = null,
-            ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
-            $buttons = null,
-            $schedule = null
-        );
+        if($doctor['one_signal_token'] != null) {
+            OneSignal::sendNotificationToUser(
+                "You Have a New " . $order->service . " from " . $order->patient->name,
+                $doctor->one_signal_token,
+                $url = null,
+                ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
+                $buttons = null,
+                $schedule = null
+            );
+        }
         return response()->json([
             'status' => 'Success',
             'message' => 'Payment Success'
