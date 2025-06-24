@@ -9,4 +9,4 @@ Sistem backend untuk aplikasi klinik berbasis Laravel, menyediakan API untuk man
 - Order layanan klinik & histori order
 - Notifikasi (OneSignal)
 - Chat Room & Call Room (Agora)
-- Dokumentasi API tersedia di `https://api.kel3pemrograman.my.id/`
+- Dokumentasi API tersedia di <a href="https://api.kel3pemrograman.my.id/">api</a>
