@@ -87,6 +87,12 @@
             Logout user
         </li>
     </ul>
+    <h2>Call Room (Agora)</h2>
+    <ul>
+        <li><span class="method">POST</span> <code>/agora/generate-token</code> <span class="auth">(Authentication Required)</span> — Create/generate token for call room</li>
+        <li><span class="method">GET</span> <code>/agora/{user_id}/call-rooms</code> <span class="auth">(Authentication Required)</span> — Get all call rooms for user</li>
+        <li><span class="method">PUT</span> <code>/agora/{id}/call-rooms/{status}</code> <span class="auth">(Authentication Required)</span> — Update call room status</li>
+    </ul>
 
     <h2>User</h2>
     <ul>
