@@ -27,5 +27,6 @@ class ChangeStatusOrderExpired extends Command
             ->where('status', '!=', 'PENDING')
             ->where('created_at', '<=', $now->subHours(24))
             ->update(['status' => 'EXPIRED']);
+        $this->info('Expired orders status updated successfully.');
     }
 }
