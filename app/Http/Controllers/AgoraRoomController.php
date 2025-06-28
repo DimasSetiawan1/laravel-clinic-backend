@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CallRoom;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Notification;
 use TaylanUnutmaz\AgoraTokenBuilder\RtcTokenBuilder;
@@ -29,7 +30,8 @@ class AgoraRoomController extends Controller
         if (!$appId || !$appCertificate || !$channelName) {
             return response()->json(['error' => 'Missing required parameters'], 400);
         }
-
+        $patient = User::find($request->patient_id);
+        $doctor = User::find($request->doctor_id);
 
         // Generate the token using Agora's SDK
         $token = RtcTokenBuilder::buildTokenWithUid(
@@ -45,8 +47,8 @@ class AgoraRoomController extends Controller
             'call_room_uid' => $uid,
             'call_channel' => $channelName,
             'call_token' => $token,
-            'patient_id' => $request->patient_id,
-            'doctor_id' => $request->doctor_id,
+            'patient' => $patient,
+            'doctor' => $doctor,
             'expired_token' => date('Y-m-d H:i:s', $privilegeExpiredTs),
             'status' => 'Waiting',
         ]);
