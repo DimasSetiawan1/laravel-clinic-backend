@@ -30,9 +30,6 @@ class AgoraRoomController extends Controller
         if (!$appId || !$appCertificate || !$channelName) {
             return response()->json(['error' => 'Missing required parameters'], 400);
         }
-        $patient = User::find($request->patient_id);
-        $doctor = User::find($request->doctor_id);
-
         // Generate the token using Agora's SDK
         $token = RtcTokenBuilder::buildTokenWithUid(
             $appId,
@@ -47,8 +44,8 @@ class AgoraRoomController extends Controller
             'call_room_uid' => $uid,
             'call_channel' => $channelName,
             'call_token' => $token,
-            'patient' => $patient,
-            'doctor' => $doctor,
+            'patient' => $request->patient_id,
+            'doctor' => $request->doctor_id,
             'expired_token' => date('Y-m-d H:i:s', $privilegeExpiredTs),
             'status' => 'Waiting',
         ]);
@@ -71,7 +68,7 @@ class AgoraRoomController extends Controller
         );
     }
 
-    public function getCallRooms( int $user_id)
+    public function getCallRooms(int $user_id)
     {
         $validator = \Validator::make(['user_id' => $user_id], [
             'user_id' => 'required|integer|exists:users,id'
@@ -87,13 +84,8 @@ class AgoraRoomController extends Controller
         $callRooms = CallRoom::where(function ($query) use ($user_id) {
             $query->where('patient_id', $user_id)
                 ->orWhere('doctor_id', $user_id);
-        })
-            ->where(function ($query) {
-                $query->where('status', 'Waiting')
-                    ->orWhere('status', 'Ongoing');
-            })
-            ->get();
-
+        })->with(['patient', 'doctor'])->get();
+        $callRooms->makeHidden(['doctor_id', 'patient_id']);
 
         if ($callRooms->isEmpty()) {
             return response()->json(['error' => 'No active call rooms found'], 404);
@@ -104,7 +96,7 @@ class AgoraRoomController extends Controller
 
     public function updateCallRoomStatus(int $id, String $status)
     {
-        $validator = \Validator::make(['status' => $status, 'id' => $id ], [
+        $validator = \Validator::make(['status' => $status, 'id' => $id], [
             'status' => 'required|in:Waiting,Close,Ongoing',
             'id' => 'required|integer|exists:call_rooms,id'
         ]);
