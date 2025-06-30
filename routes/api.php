@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AgoraRoomController;
+use App\Http\Controllers\Api\AgoraRoomController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OrderController;
