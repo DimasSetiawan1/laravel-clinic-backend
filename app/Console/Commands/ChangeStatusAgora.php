@@ -28,9 +28,7 @@ class ChangeStatusAgora extends Command
     public function handle()
     {
         $now = Carbon::now();
-        CallRoom::where('status', '!=', 'Waiting')
-            ->where('status', '!=', 'Ongoing')
-            ->where('expired_token', '<=', $now->subHours(24))
+        CallRoom::where('expired_token', '<=', $now->subHours(24))
             ->update(['status' => 'Close']);
         $this->info('Agora rooms status updated successfully.');
     }

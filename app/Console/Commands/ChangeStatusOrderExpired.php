@@ -23,9 +23,7 @@ class ChangeStatusOrderExpired extends Command
     {
         $now = Carbon::now();
 
-        Order::where('status', '!=', 'PAID')
-            ->where('status', '!=', 'PENDING')
-            ->where('created_at', '<=', $now->subHours(24))
+        Order::where('created_at', '<=', $now->subHours(24))
             ->update(['status' => 'EXPIRED']);
         $this->info('Expired orders status updated successfully.');
     }
