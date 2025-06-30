@@ -26,9 +26,9 @@ class ChangeStatusAgora extends Command
      */
     public function handle()
     {
-        CallRoom::where('status', '!=', 'WAITING')
-            ->where('status', '!=', 'ONGOING')
+        CallRoom::where('status', '!=', 'Waiting')
+            ->where('status', '!=', 'Ongoing')
             ->where('expired_token', '<=', now()->subMinutes(30))
-            ->update(['status' => 'EXPIRED']);
+            ->update(['status' => 'Close']);
     }
 }
