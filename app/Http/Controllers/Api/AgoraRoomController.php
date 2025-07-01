@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CallRoom;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Notification;
 use TaylanUnutmaz\AgoraTokenBuilder\RtcTokenBuilder;
 
@@ -31,6 +32,8 @@ class AgoraRoomController extends Controller
         if (!$appId || !$appCertificate || !$channelName) {
             return response()->json(['error' => 'Missing required parameters'], 400);
         }
+        Log::info('Start generate token');
+
         // Generate the token using Agora's SDK
         $token = RtcTokenBuilder::buildTokenWithUid(
             $appId,
@@ -40,16 +43,19 @@ class AgoraRoomController extends Controller
             RtcTokenBuilder::RolePublisher,
             $privilegeExpiredTs
         );
+        Log::info('Token generated');
 
+        Log::info('Start create call room');
         CallRoom::create([
             'call_room_uid' => $uid,
             'call_channel' => $channelName,
             'call_token' => $token,
-            'patient' => $request->patient_id,
-            'doctor' => $request->doctor_id,
+            'patient_id' => $request->patient_id,
+            'doctor_id' => $request->doctor_id,
             'expired_token' => date('Y-m-d H:i:s', $privilegeExpiredTs),
             'status' => 'Waiting',
         ]);
+        Log::info('Call room created');
 
         // OneSignal::sendNotificationToUser(
         //     "You Have a New " . $order->service . " from " . $order->patient->name,
@@ -69,23 +75,42 @@ class AgoraRoomController extends Controller
         );
     }
 
-    public function getCallRooms(int $user_id)
+    public function getCallRooms(Request $request, int $user_id,)
     {
-        $validator = \Validator::make(['user_id' => $user_id], [
-            'user_id' => 'required|integer|exists:users,id'
-        ]);
+        $status = $request->query('status');
+
+        $validator = validator(
+            ['user_id' => $user_id, 'status' => $status],
+            [
+            'user_id' => 'required|integer|exists:users,id',
+            'status' => 'nullable|string|in:All,Waiting,Ongoing,Expired,Finished'
+            ]
+        );
 
         if ($validator->fails()) {
             return response()->json([
-                'error' => 'Invalid user ID',
-                'details' => $validator->errors()
+            'error' => 'Invalid parameters',
+            'details' => $validator->errors()
             ], 400);
         }
 
-        $callRooms = CallRoom::where(function ($query) use ($user_id) {
-            $query->where('patient_id', $user_id)
-                ->orWhere('doctor_id', $user_id);
-        })->with(['patient', 'doctor'])->get();
+        if ($status && $status != 'All') {
+            $callRooms = CallRoom::where('status', $status)
+            ->where(function ($q) use ($user_id) {
+                $q->where('patient_id', $user_id)
+                  ->orWhere('doctor_id', $user_id);
+            })
+            ->with(['patient', 'doctor'])
+            ->get();
+        } else {
+            $callRooms = CallRoom::where(function ($q) use ($user_id) {
+                $q->where('patient_id', $user_id)
+                  ->orWhere('doctor_id', $user_id);
+            })
+            ->with(['patient', 'doctor'])
+            ->get();
+        }
+
         $callRooms->makeHidden(['doctor_id', 'patient_id']);
 
         if ($callRooms->isEmpty()) {
@@ -97,7 +122,7 @@ class AgoraRoomController extends Controller
 
     public function updateCallRoomStatus(int $id, String $status)
     {
-        $validator = \Validator::make(['status' => $status, 'id' => $id], [
+        $validator = validator(['status' => $status, 'id' => $id], [
             'status' => 'required|in:Waiting,Close,Ongoing',
             'id' => 'required|integer|exists:call_rooms,id'
         ]);
