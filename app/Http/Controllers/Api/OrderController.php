@@ -150,10 +150,6 @@ class OrderController extends Controller
             $currentTimeStamp = time();
             $privilegeExpiredTs = $currentTimeStamp + $expirationTimeInSeconds;
 
-            if (!$appId || !$appCertificate || !$channelName) {
-                return response()->json(['error' => 'Missing required parameters'], 400);
-            }
-
             $token = RtcTokenBuilder::buildTokenWithUid(
                 $appId,
                 $appCertificate,
