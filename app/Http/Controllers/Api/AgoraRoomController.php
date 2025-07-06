@@ -23,18 +23,14 @@ class AgoraRoomController extends Controller
         $appCertificate = env('AGORA_APP_CERTIFICATE');
         $channelName = $request->channel_name;
         $uid = (string) \Illuminate\Support\Str::uuid();
-
         $expirationTimeInSeconds = 7200; // 2 jam
         $currentTimeStamp = time();
         $privilegeExpiredTs = $currentTimeStamp + $expirationTimeInSeconds;
 
-        // Validate inputs
         if (!$appId || !$appCertificate || !$channelName) {
             return response()->json(['error' => 'Missing required parameters'], 400);
         }
-        Log::info('Start generate token');
 
-        // Generate the token using Agora's SDK
         $token = RtcTokenBuilder::buildTokenWithUid(
             $appId,
             $appCertificate,
@@ -43,9 +39,6 @@ class AgoraRoomController extends Controller
             RtcTokenBuilder::RolePublisher,
             $privilegeExpiredTs
         );
-        Log::info('Token generated');
-
-        Log::info('Start create call room');
         CallRoom::create([
             'call_room_uid' => $uid,
             'call_channel' => $channelName,
@@ -55,16 +48,6 @@ class AgoraRoomController extends Controller
             'expired_token' => date('Y-m-d H:i:s', $privilegeExpiredTs),
             'status' => 'Waiting',
         ]);
-        Log::info('Call room created');
-
-        // OneSignal::sendNotificationToUser(
-        //     "You Have a New " . $order->service . " from " . $order->patient->name,
-        //     $doctor->one_signal_token,
-        //     $url = null,
-        //     ['order_id' => $order->id, 'chat_room_id' => $order->chat_room_id],
-        //     $buttons = null,
-        //     $schedule = null
-        // );
 
         return response()->json(
             [

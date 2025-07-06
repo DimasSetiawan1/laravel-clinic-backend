@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CallRoom;
 use App\Models\ChatRooms;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\FirestoreService;
 use Illuminate\Http\Request;
 use OneSignal;
+use TaylanUnutmaz\AgoraTokenBuilder\RtcTokenBuilder;
 use Xendit\Configuration;
 use Xendit\Invoice\CreateInvoiceRequest;
 use Xendit\Invoice\InvoiceApi;
@@ -110,44 +112,71 @@ class OrderController extends Controller
             $data['status'] == 'PAID' &&
             empty($order->chat_room_id)
         ) {
-
-            $chat_rooms = ChatRooms::where('doctors_id', $order->doctor_id)
-                ->where('users_id', $order->patient_id)
-                ->where('orders_id', $order->id)
-                ->first();
-
-            if (!$chat_rooms) {
-                $chat_rooms = ChatRooms::create([
-                    'id' => (string) \Illuminate\Support\Str::uuid(),
+            $chat_rooms = ChatRooms::firstOrCreate(
+                [
                     'doctors_id' => $order->doctor_id,
                     'users_id' => $order->patient_id,
                     'orders_id' => $order->id
-                ]);
-            } else {
-                $chat_rooms['id'] = (string) \Illuminate\Support\Str::uuid();
-                $chat_rooms->save();
-            }
+                ],
+                [
+                    'id' => (string) \Illuminate\Support\Str::uuid()
+                ]
+            );
 
             $order->chat_room_id = $chat_rooms->id;
+
             try {
                 $this->firestoreService->createChatRoom(
                     $chat_rooms->id,
                     $order->patient_id,
                     $order->doctor_id
                 );
-
             } catch (\Exception $e) {
                 return response()->json([
                     'status' => 'Failed',
                     'message' => 'Failed to create chat room in Firestore: ' . $e->getMessage()
                 ], 500);
             }
+        } else if (
+            strtolower($order->service) == 'telemedicine' &&
+            $data['status'] == 'PAID' &&
+            empty($order->chat_room_id)
+        ) {
+            $channelName = 'telemedicine-' . $order->id;
+            $appId = env('AGORA_APP_ID');
+            $appCertificate = env('AGORA_APP_CERTIFICATE');
+            $uid = (string) \Illuminate\Support\Str::uuid();
+            $expirationTimeInSeconds = 7200; // 2 jam
+            $currentTimeStamp = time();
+            $privilegeExpiredTs = $currentTimeStamp + $expirationTimeInSeconds;
+
+            if (!$appId || !$appCertificate || !$channelName) {
+                return response()->json(['error' => 'Missing required parameters'], 400);
+            }
+
+            $token = RtcTokenBuilder::buildTokenWithUid(
+                $appId,
+                $appCertificate,
+                $channelName,
+                $uid,
+                RtcTokenBuilder::RolePublisher,
+                $privilegeExpiredTs
+            );
+            CallRoom::create([
+                'call_room_uid' => $uid,
+                'call_channel' => $channelName,
+                'call_token' => $token,
+                'patient_id' => $order->patient_id,
+                'doctor_id' => $order->doctor_id,
+                'expired_token' => date('Y-m-d H:i:s', $privilegeExpiredTs),
+                'status' => 'Waiting',
+            ]);
         }
         $order->status = $data['status'];
         $order->status_service = "ACTIVE";
 
         $order->save();
-        if($doctor['one_signal_token'] != null) {
+        if ($doctor['one_signal_token'] != null) {
             OneSignal::sendNotificationToUser(
                 "You Have a New " . $order->service . " from " . $order->patient->name,
                 $doctor->one_signal_token,
@@ -156,6 +185,11 @@ class OrderController extends Controller
                 $buttons = null,
                 $schedule = null
             );
+        } else {
+            return response()->json([
+                'status' => 'Failed',
+                'message' => 'Doctor One Signal Token not found'
+            ], 404);
         }
         return response()->json([
             'status' => 'Success',
