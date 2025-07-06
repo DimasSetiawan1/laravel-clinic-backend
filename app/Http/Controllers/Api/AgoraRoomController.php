@@ -12,51 +12,7 @@ use TaylanUnutmaz\AgoraTokenBuilder\RtcTokenBuilder;
 
 class AgoraRoomController extends Controller
 {
-    public function generateTokenCallRoom(Request $request)
-    {
-        $request->validate([
-            'channel_name' => 'required|string',
-            'doctor_id' => 'required|exists:users,id',
-            'patient_id' => 'required|exists:users,id',
-        ]);
-        $appId = env('AGORA_APP_ID');
-        $appCertificate = env('AGORA_APP_CERTIFICATE');
-        $channelName = $request->channel_name;
-        $uid = (string) \Illuminate\Support\Str::uuid();
-        $expirationTimeInSeconds = 7200; // 2 jam
-        $currentTimeStamp = time();
-        $privilegeExpiredTs = $currentTimeStamp + $expirationTimeInSeconds;
-
-        if (!$appId || !$appCertificate || !$channelName) {
-            return response()->json(['error' => 'Missing required parameters'], 400);
-        }
-
-        $token = RtcTokenBuilder::buildTokenWithUid(
-            $appId,
-            $appCertificate,
-            $channelName,
-            $uid,
-            RtcTokenBuilder::RolePublisher,
-            $privilegeExpiredTs
-        );
-        CallRoom::create([
-            'call_room_uid' => $uid,
-            'call_channel' => $channelName,
-            'call_token' => $token,
-            'patient_id' => $request->patient_id,
-            'doctor_id' => $request->doctor_id,
-            'expired_token' => date('Y-m-d H:i:s', $privilegeExpiredTs),
-            'status' => 'Waiting',
-        ]);
-
-        return response()->json(
-            [
-                'token' => $token,
-                'uid' => $uid,
-            ],
-            200
-        );
-    }
+   
 
     public function getCallRooms(Request $request, int $user_id,)
     {

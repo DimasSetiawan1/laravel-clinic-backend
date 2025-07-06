@@ -15,8 +15,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Agora
-Route::post('/agora/generate-token', [AgoraRoomController::class, 'generateTokenCallRoom'])
-    ->middleware('auth:sanctum');
+
 
 //get call rooms : all, ongoing, waiting, expired, finished
 Route::get('/agora/{user_id}/call-rooms', [AgoraRoomController::class, 'getCallRooms'])
