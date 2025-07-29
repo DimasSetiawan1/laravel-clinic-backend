@@ -28,7 +28,18 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Pastikan sudah ada clinic dan specialist sebelum insert user doctor!
-        $clinic = \App\Models\Clinic::first() ?? \App\Models\Clinic::create(['name' => 'Klinik Dimas']);
+        $clinic = \App\Models\Clinic::first() ?? \App\Models\Clinic::create([
+            'name' => 'Klinik Dimas',
+            'address' => 'Jl. Pendidikan I no 4',
+            'phone_number' => '02112345678',
+            'email' => 'klinikdimas@example.com',
+            'open_time' => '08:00',
+            'close_time' => '17:00',
+            'website' => env("APP_URL"),
+            'description' => 'Klinik Dimas melayani kesehatan umum dan gigi.',
+            'image' => null,
+            'spesialis' => 'Dokter Umum, Dokter Gigi'
+        ]);
         $specialistUmum = Specialist::firstOrCreate(['name' => 'Dokter Umum']);
         $specialistGigi = Specialist::firstOrCreate(['name' => 'Dokter Gigi']);
 
