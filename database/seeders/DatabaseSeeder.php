@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(2)->create();
 
-        // User::create([
-        //     'name' => "M Dimas Setiawan",
-        //     'email' => "dimas@dimas.com",
-        //     'email_verified_at' => now(),
-        //     'role' => 'admin',
-        //     'password' => Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-        // ]);
+        User::create([
+            'name' => "Mochamad Dimas Setiawan",
+            'email' => "dimas@dimastech.my.id",
+            'email_verified_at' => now(),
+            'role' => 'admin',
+            'password' => Hash::make('dimasdimas'),
+            'remember_token' => Str::random(10),
+        ]);
 
         // Pastikan sudah ada clinic dan specialist sebelum insert user doctor!
         $clinic = \App\Models\Clinic::first() ?? \App\Models\Clinic::create([
