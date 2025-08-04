@@ -145,7 +145,9 @@ class OrderController extends Controller
             $channelName = 'telemedicine-' . $order->id;
             $appId = env('AGORA_APP_ID');
             $appCertificate = env('AGORA_APP_CERTIFICATE');
-            $uid = (string) \Illuminate\Support\Str::uuid();
+            do {
+                $uid = random_int(100000, 999999999);
+            } while (CallRoom::where('call_room_uid', $uid)->exists());
             $expirationTimeInSeconds = 7200; // 2 jam
             $currentTimeStamp = time();
             $privilegeExpiredTs = $currentTimeStamp + $expirationTimeInSeconds;
