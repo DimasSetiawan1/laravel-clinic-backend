@@ -10,6 +10,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Artisan::command('app:change-status-agora', function (){
+    \Log::info('Changing status of Agora rooms...');
     $this->call(ChangeStatusAgora::class);
-    $this->info('Order status changed to expired successfully.');
+    $this->info('Agora rooms status changed successfully.');
 })->everyMinute();
