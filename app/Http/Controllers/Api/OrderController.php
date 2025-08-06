@@ -145,7 +145,6 @@ class OrderController extends Controller
             $channelName = 'telemedicine-' . $order->id;
             $appId = env('AGORA_APP_ID');
             $appCertificate = env('AGORA_APP_CERTIFICATE');
-            $uid = (int) date('HisdmY');
             $expirationTimeInSeconds = 7200; // 2 jam
             $currentTimeStamp = time();
             $privilegeExpiredTs = $currentTimeStamp + $expirationTimeInSeconds;
@@ -154,12 +153,11 @@ class OrderController extends Controller
                 $appId,
                 $appCertificate,
                 $channelName,
-                $uid,
+                $order->id,
                 RtcTokenBuilder::RolePublisher,
                 $privilegeExpiredTs
             );
             CallRoom::create([
-                'call_room_uid' => $uid,
                 'call_channel' => $channelName,
                 'call_token' => $token,
                 'patient_id' => $order->patient_id,
